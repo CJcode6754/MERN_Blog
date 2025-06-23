@@ -3,23 +3,35 @@ import { GiFallingStar } from "react-icons/gi";
 
 export default function Hero() {
   return (
-    <section className="flex flex-col items-center justify-center pt-12 space-y-8">
-      <button className="flex items-center gap-4 px-6 py-2 border bg-amber-100 rounded-xl border-amber-700">
+    <section className="flex flex-col items-center justify-center py-24 text-center">
+      <div className="inline-flex items-center gap-4 px-6 py-1.5 mb-8 border border-blue-500 rounded-full text-sm ">
         <span>New: Ai featured integrated</span>{" "}
-        <GiFallingStar className="text-amber-600" />
-      </button>
-      <h1 className="text-4xl font-bold text-center text-gray-600">Your own <span className="text-amber-800">Ai Blogging</span> <br/> Platform.</h1>
-      <p className="text-center">
+        <GiFallingStar className="text-blue-500" />
+      </div>
+      <h1 className="text-3xl font-semibold text-gray-700 sm:text-6xl sm:leading-16">
+        Your own <span className="text-blue-500">Ai Blogging</span> <br />{" "}
+        Platform.
+      </h1>
+      <p className="max-w-2xl m-auto my-6 text-gray-500 sm:my-8 max-sm:text-xs">
         This is your space to think out loud, to share what matters, and to
-        write without filters. <br/> Whether it's one word or a thousand, your story
-        starts right here.
+        write without filters. <br /> Whether it's one word or a thousand, your
+        story starts right here.
       </p>
-      <div className="flex gap-4 px-4 py-2 border border-gray-400 rounded-lg sm:gap-18">
-        <input type="search" name="" id="" placeholder="Search blogs here" className="focus:outline-none" />
-        <button className="px-6 py-2 text-white rounded-md bg-amber-600 hover:bg-amber-700">
+
+      <form className="flex justify-between max-w-lg overflow-hidden bg-white border border-gray-300 rounded max-sm:scale-75 max-auto">
+        <input
+          type="search"
+          placeholder="Search blogs here"
+          className="w-full pl-4 outline-none"
+          required
+        />
+        <button
+          type="submit"
+          className="px-8 py-2 m-1.25 rounded text-white hover:scale-105 transition-all cursor-pointer bg-blue-500"
+        >
           Search
         </button>
-      </div>
+      </form>
     </section>
   );
 }
