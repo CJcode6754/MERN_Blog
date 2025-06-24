@@ -4,6 +4,7 @@ import { assets, blogs, comments_data } from "../assets/assets";
 import Navbar from "../components/Navbar";
 import Moment from "moment";
 import Footer from '../components/Footer';
+import Loader from "../components/Loader";
 
 export default function Blog() {
   const { id } = useParams();
@@ -121,8 +122,6 @@ export default function Blog() {
       <Footer/>
     </>
   ) : (
-    <div className="flex items-center justify-center w-full h-screen">
-      <h1 className="text-2xl font-semibold">Loading...</h1>
-    </div>
+    <Loader/>
   );
 }

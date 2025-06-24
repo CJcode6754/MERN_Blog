@@ -328,3 +328,10 @@ export const comments_data = [
     __v: 0
   }
 ];
+
+export const dashboard_data = {
+    "blogs": 10,
+    "comments": 5,
+    "drafts": 0,
+    "recentBlogs": blogs.slice(0, 5),
+}
