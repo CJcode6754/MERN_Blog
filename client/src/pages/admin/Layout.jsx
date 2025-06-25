@@ -11,7 +11,7 @@ function Layout() {
     navigate("/");
   };
   return (
-    <div className="shadow">
+    <div>
       <div className="flex items-center justify-between py-1 mx-4 sm:mx-20 xl:mx-32">
         <div className="flex items-center gap-1">
           <img

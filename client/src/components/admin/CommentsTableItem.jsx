@@ -5,7 +5,7 @@ function CommentsTableItem({ comment, fetchComments }) {
 
   const BlogDate = new Date(created_at);
   return (
-    <tr className="bordey-y border-gray-300 px">
+    <tr className="bordey-y border-gray-300">
       <td className="px-6 py-4">
         <strong>Blog: </strong> {blog.title}
         <br />
