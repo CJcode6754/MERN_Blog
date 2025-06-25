@@ -1,25 +1,25 @@
-import { TicketIcon, Trash2 } from "lucide-react";
+import { CircleCheck, TicketIcon, Trash2 } from "lucide-react";
 
 function CommentsTableItem({ comment, fetchComments }) {
   const { blog, created_at, id } = comment;
 
   const BlogDate = new Date(created_at);
   return (
-    <tr className="bordey-y border-gray-300">
-      <td className="px-2 py-4">
+    <tr className="bordey-y border-gray-300 px">
+      <td className="px-6 py-4">
         <strong>Blog: </strong> {blog.title}
         <br />
         <strong>Name: </strong> {comment.name}
         <br />
         <strong>Comment: </strong> {comment.content}
       </td>
-      <td className="px-2 py-4 max-sm:hidden">
+      <td className="px-6 py-4 max-sm:hidden">
         {BlogDate.toLocaleDateString()}
       </td>
-      <td className="px-2 py-4 max-sm:hidden">
+      <td className="px-6 py-4 max-sm:hidden">
         <div className="inline-flex items-center gap-4">
           {!comment.isApproved ? (
-            <TicketIcon className="w-5 hover:scale-110 transition-all cursor-pointer" />
+            <CircleCheck  className="w-5 text-green-600 hover:scale-110 transition-all cursor-pointer" />
           ) : (
             <p className="text-xs border border-green-600 bg-green-100 text-green-600 rounded-full px-3 py-1">
               Approved

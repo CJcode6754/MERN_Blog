@@ -4,7 +4,7 @@ import CommentsTableItem from "../../components/admin/CommentsTableItem";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
-  const [filter, setFilter] = useState("Not Approved");
+  const [filter, setFilter] = useState("Approved");
 
   const fetchComments = async () => {
     setComments(comments_data);
@@ -12,7 +12,7 @@ const Comments = () => {
 
   useEffect(() => {
     fetchComments();
-  });
+  }, []);
 
   return (
     <div className="flex-1 pt-5 px-5 sm:pt-12 sm:pl-16 bg-blue-50/50">
@@ -41,30 +41,44 @@ const Comments = () => {
 
       <div className="relative h-4/5 max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hidden bg-white">
         <table className="w-full text-sm text-gray-500">
-          <thead className="text-xs tect-gray-600 text-left uppercase">
+          <thead className="text-xs text-gray-600 text-left uppercase">
             <tr>
-              <th scope="col" className="px-2 py-4">
+              <th scope="col" className="px-6 py-4">
                 Blog Title & Comments
               </th>
-              <th scope="col" className="px-2 py-4 max-sm:hidden">
+              <th scope="col" className="px-6 py-4 max-sm:hidden">
                 Date
               </th>
-              <th scope="col" className="px-2 py-4">
+              <th scope="col" className="px-6 py-4">
                 Actions
               </th>
             </tr>
           </thead>
 
           <tbody>
-            {comments.map((comments) => {
-              return (
-                <CommentsTableItem
-                  key={comments.id}
-                  comment={comments}
-                  fetchComments={fetchComments}
-                />
-              );
-            })}
+            {comments.filter((comment) =>
+              filter === "Approved" ? comment.isApproved : !comment.isApproved
+            ).length === 0 ? (
+              <tr>
+                <td colSpan="3" className="text-center py-6 text-gray-400">
+                  No {filter.toLowerCase()} comments found.
+                </td>
+              </tr>
+            ) : (
+              comments
+                .filter((comment) =>
+                  filter === "Approved"
+                    ? comment.isApproved
+                    : !comment.isApproved
+                )
+                .map((comment) => (
+                  <CommentsTableItem
+                    key={comment.id}
+                    comment={comment}
+                    fetchComments={fetchComments}
+                  />
+                ))
+            )}
           </tbody>
         </table>
       </div>

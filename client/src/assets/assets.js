@@ -282,7 +282,7 @@ export const comments_data = [
     blog: blogs[1],
     name: "Michael Reyes",
     content: "I didn’t realize AI was already being used in transportation. Eye-opener!",
-    isApproved: true,
+    isApproved: false,
     created_at: "2025-06-01T13:40:00Z",
     updated_at: "2025-06-01T13:40:00Z",
     __v: 0
