@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RiBloggerLine, RiDraftLine } from "react-icons/ri";
 import { dashboard_data } from "../../assets/assets";
 import { BiCommentDetail } from "react-icons/bi";
+import BlogTableItem from "../../components/admin/BlogTableItem";
 
 function Dashboard() {
   const [dashboardData, setDashboardData] = useState({
@@ -69,40 +70,23 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="overflow-x-auto bg-white shadow rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-100 text-gray-600 text-sm">
-              <tr>
-                <th className="px-6 py-3 text-left">ID</th>
-                <th className="px-6 py-3 text-left">Title</th>
-                <th className="px-6 py-3 text-left">Date</th>
-                <th className="px-6 py-3 text-left">Status</th>
-                <th className="px-6 py-3 text-left">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm">
-              <tr className="hover:bg-gray-50">
-                <td className="px-6 py-4">1</td>
-                <td className="px-6 py-4">How AI is Changing the Web</td>
-                <td className="px-6 py-4">2025-06-24</td>
-                <td className="px-6 py-4">
-                  <span className="px-3 py-1 text-xs font-medium bg-green-100 text-green-600 rounded-full">
-                    Published
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <button className="text-blue-500 hover:underline">
-                    View
-                  </button>
-                  <button className="ml-4 text-red-500 hover:underline">
-                    Delete
-                  </button>
-                </td>
-              </tr>
-              {/* Repeat rows as needed */}
-            </tbody>
-          </table>
-        </div>
+        <table className="w-full text-sm text-gray-500">
+          <thead className="text-xs tect-gray-600 text-left uppercase">
+            <tr>
+              <th scope="col" className="px-2 py-4 xl:px-6">ID</th>
+              <th scope="col" className="px-2 py-4">Blog Title</th>
+              <th scope="col" className="px-2 py-4 max-sm:hidden">Date</th>
+              <th scope="col" className="px-2 py-4 max-sm:hidden">Status</th>
+              <th scope="col" className="px-2 py-4">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {dashboardData.recentBlogs.map((blog, index) => {
+              return <BlogTableItem key={blog.id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1}/>
+            })}
+          </tbody>
+        </table>
       </div>
     </section>
   );
