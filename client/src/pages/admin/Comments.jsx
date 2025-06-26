@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { comments_data } from "../../assets/assets";
 import CommentsTableItem from "../../components/admin/CommentsTableItem";
+import { useAppContext } from "../../context/AppContext";
+import { Axis3D } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
   const [filter, setFilter] = useState("Approved");
+  const {axios} = useAppContext();
 
   const fetchComments = async () => {
-    setComments(comments_data);
+    try {
+      const {data} = await axios.get('/api/admin/comments');
+      data.success ? setComments(data.comments) : toast.error(data.message);
+    } catch (error) {
+      toast.error(data.message)
+    }
   };
 
   useEffect(() => {
@@ -65,7 +74,7 @@ const Comments = () => {
             ) : (
               filteredComments.map((comment) => (
                 <CommentsTableItem
-                  key={comment.id}
+                  key={comment._id}
                   comment={comment}
                   fetchComments={fetchComments}
                 />

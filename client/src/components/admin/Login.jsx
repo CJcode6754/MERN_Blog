@@ -1,11 +1,31 @@
 import React, { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const { axios, setToken } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Login form submitted");
+    try {
+      const { data } = await axios.post("/api/admin/login", {
+        email,
+        password,
+      });
+
+      if (data.success) {
+        setToken(data.token);
+        localStorage.setItem("token", data.token);
+        axios.defaults.headers.common["Authorization"] = data.token;
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -14,7 +34,7 @@ const Login = () => {
         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
           Admin Login
         </h2>
-        <form onClick={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
             <label
               htmlFor="email"
@@ -28,7 +48,7 @@ const Login = () => {
               type="email"
               id="email"
               className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-              placeholder="admin@example.com"
+              placeholder="Enter admin email here"
             />
           </div>
           <div>

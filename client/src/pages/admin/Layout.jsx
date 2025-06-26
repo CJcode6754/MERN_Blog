@@ -1,15 +1,18 @@
-import React from "react";
 import { LuArrowRight } from "react-icons/lu";
 import { assets } from "../../assets/assets";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Sidebar from "../../components/admin/Sidebar";
+import { useAppContext } from "../../context/AppContext";
 
 function Layout() {
-  const navigate = useNavigate();
-
+  const { axios, navigate, setToken } = useAppContext();
   const logout = () => {
+    localStorage.removeItem("token");
+    axios.defaults.headers.common["Authorization"] = null;
+    setToken(null);
     navigate("/");
   };
+
   return (
     <div>
       <div className="flex items-center justify-between py-1 mx-4 sm:mx-20 xl:mx-32">
@@ -32,10 +35,10 @@ function Layout() {
       </div>
 
       <div className="flex h-[calc(100vh-70px)]">
-          <aside>
-            <Sidebar/>
-          </aside>
-          <Outlet/>
+        <aside>
+          <Sidebar />
+        </aside>
+        <Outlet />
       </div>
     </div>
   );

@@ -3,26 +3,85 @@ import { useParams } from "react-router-dom";
 import { assets, blogs, comments_data } from "../assets/assets";
 import Navbar from "../components/Navbar";
 import Moment from "moment";
-import Footer from '../components/Footer';
+import Footer from "../components/Footer";
 import Loader from "../components/Loader";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 export default function Blog() {
   const { id } = useParams();
+  const { axios } = useAppContext();
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
+
   const fetchBlogData = async () => {
-    const data = blogs.find((item) => item.id === id);
-    setData(data);
+    console.log("Blog ID from params:", id); // Add this debug line
+    try {
+      if (!id || id === "undefined") {
+        toast.error("Invalid blog ID");
+        return;
+      }
+
+      const { data } = await axios.get(`/api/blog/${id}`);
+      if (data.success) {
+        setData(data.blog);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Fetch blog error:", error); // Add this debug line
+      toast.error(error.response?.data?.message || "Error fetching blog");
+    }
   };
 
   const fetchComments = async () => {
-    setComments(comments_data);
+    console.log("Fetching comments for blog ID:", id); // Add this debug line
+    try {
+      if (!id || id === "undefined") {
+        toast.error("Invalid blog ID for comments");
+        return;
+      }
+
+      const { data } = await axios.get(`/api/blog/comments/${id}`);
+      if (data.success) {
+        setComments(data.comments);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Fetch comments error:", error); // Add this debug line
+      toast.error(error.response?.data?.message || "Error fetching comments");
+    }
   };
 
   const addComment = async (e) => {
     e.preventDefault();
+
+    if (!name || !content) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    try {
+      const response = await axios.post("/api/blog/add-comment", {
+        blog: id, // Add the blog ID here
+        name,
+        content,
+      });
+
+      if (response.data.success) {
+        toast.success('Comment submitted for review');
+        setName("");
+        setContent("");
+        fetchComments();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error adding comment");
+    }
   };
 
   useEffect(() => {
@@ -40,7 +99,7 @@ export default function Blog() {
         <h1 className="max-w-2xl mx-auto text-2xl font-semibold text-gray-800 sm:text-5xl">
           {data.title}
         </h1>
-        <h2 className="max-w-lg mx-auto my-5 truncate">{data.subtitle}</h2>
+        <h2 className="max-w-lg mx-auto my-5 truncate">{data.subTitle}</h2>
         <p className="inline-block px-4 py-1 mb-6 text-sm font-medium text-blue-500 border rounded-full border-blue-500/35 bg-blue-500/5">
           Ceejay Ibabiosa
         </p>
@@ -111,17 +170,27 @@ export default function Blog() {
         </div>
 
         <div className="my-24 max-w-3xl mx-auto">
-          <p className="font-semibold my-4">Share this article on social media</p>
+          <p className="font-semibold my-4">
+            Share this article on social media
+          </p>
 
           <div className="flex gap-4">
-            <img src={assets.facebook} alt="" className="w-10 h-10 shadow rounded-full" />
-            <img src={assets.twitter} alt="" className="w-10 h-10 shadow rounded-full"/>
+            <img
+              src={assets.facebook}
+              alt=""
+              className="w-10 h-10 shadow rounded-full"
+            />
+            <img
+              src={assets.twitter}
+              alt=""
+              className="w-10 h-10 shadow rounded-full"
+            />
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   ) : (
-    <Loader/>
+    <Loader />
   );
 }

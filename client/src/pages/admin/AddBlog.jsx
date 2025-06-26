@@ -2,8 +2,14 @@ import { Upload } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import Quill from "quill";
 import { blogCategories } from "../../assets/assets";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
+import { parse } from "marked";
 
 const AddBlog = () => {
+  const { axios } = useAppContext();
+  const [isAdding, setIsAdding] = useState(false);
+  const [loading, setLoading] = useState(false);
   const editorRef = useRef(null);
   const quillRef = useRef(null);
 
@@ -13,12 +19,60 @@ const AddBlog = () => {
   const [category, setCategory] = useState("Startup");
   const [isPublished, setIsPublished] = useState(false);
 
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
+  const generateContent = async () => {
+    if (!title) return toast.error("Please enter a title");
+
+    try {
+      setLoading(true);
+      const { data } = await axios.post("/api/blog/generate", {
+        prompt: title,
+      });
+      if (data.success) {
+        quillRef.current.root.innerHTML = parse(data.content);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(data.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const generateContent = async (e) => {
-    e.preventDefault();
+  const onSubmitHandler = async (e) => {
+    try {
+      e.preventDefault();
+      setIsAdding(true);
+
+      const blog = {
+        title,
+        subTitle,
+        description: quillRef.current.root.innerHTML,
+        category,
+        isPublished,
+      };
+
+      const formData = new FormData();
+
+      formData.append("blog", JSON.stringify(blog));
+      formData.append("image", image);
+
+      const { data } = await axios.post("/api/blog/add", formData);
+
+      if (data.success) {
+        toast.success(data.message);
+        setImage(false);
+        setTitle("");
+        quillRef.current.root.innerHTML = "";
+        setCategory("Startup");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   useEffect(() => {
@@ -92,18 +146,33 @@ const AddBlog = () => {
         </div>
 
         {/* Blog description */}
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium mb-1">
-            Blog description
+        <div className="mb-6 relative">
+          <label className="block text-gray-700 font-semibold mb-2">
+            Blog Description
           </label>
-          <div ref={editorRef} className="min-h-40 border border-gray-300">
-          </div>
-          <div className="flex justify-end mt-2">
+
+          <div
+            ref={editorRef}
+            className="min-h-40 p-3 border border-gray-300 rounded-md bg-white focus:outline-none"
+          ></div>
+
+          {loading && (
+            <div className="absolute inset-0 bg-white/60 flex items-center justify-center z-10 rounded-md">
+              <div className="w-6 h-6 border-2 border-t-transparent border-gray-700 rounded-full animate-spin"></div>
+            </div>
+          )}
+
+          <div className="flex justify-end mt-3">
             <button
+              disabled={loading}
               onClick={generateContent}
-              className="text-sm px-3 py-1 bg-gray-700 text-white rounded hover:bg-gray-800"
+              className={`text-sm px-4 py-2 rounded transition-colors duration-200 ${
+                loading
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-gray-700 hover:bg-gray-800 text-white"
+              }`}
             >
-              Generate with AI
+              {loading ? "Generating..." : "Generate with AI"}
             </button>
           </div>
         </div>
@@ -145,10 +214,11 @@ const AddBlog = () => {
 
         {/* Submit */}
         <button
+          disabled={isAdding}
           type="submit"
           className="w-full py-2 bg-violet-600 text-white rounded-md hover:bg-violet-700 transition-all text-sm"
         >
-          Add Blog
+          {isAdding ? "Adding..." : "Add Blog"}
         </button>
       </form>
     </div>
