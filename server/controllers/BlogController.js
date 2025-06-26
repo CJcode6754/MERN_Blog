@@ -2,6 +2,8 @@ import fs from "fs";
 import imagekit from "../config/imageKit.js";
 import Blog from "../models/Blog.js";
 import Comment from "../models/Comment.js";
+import main from "../config/gemini.js";
+
 export const addBlog = async (req, res) => {
   try {
     const { title, subTitle, description, category, isPublished } = JSON.parse(
@@ -136,7 +138,7 @@ export const addComment = async (req, res) => {
 export const getBlogComments = async (req, res) => {
   try {
     const { blogId } = req.params;
-    
+
     // Better validation
     if (!blogId || blogId === "undefined" || blogId === "null") {
       return res
@@ -148,13 +150,28 @@ export const getBlogComments = async (req, res) => {
       blog: blogId,
       isApproved: true,
     }).sort({ createdAt: -1 });
-    
+
     res.json({ success: true, comments });
   } catch (error) {
     // This will catch invalid ObjectId format errors
-    if (error.name === 'CastError') {
-      return res.status(400).json({ success: false, message: "Invalid Blog ID format" });
+    if (error.name === "CastError") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid Blog ID format" });
     }
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const generateContent = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+    const content = await main(
+      prompt + "Generate a blog content for this topic in simple text format"
+    );
+
+    res.json({ success: true, content });
+  } catch (error) {
     res.json({ success: false, message: error.message });
   }
 };
