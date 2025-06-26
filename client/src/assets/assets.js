@@ -16,7 +16,7 @@ export const assets = {
   twitter
 };
 
-export const blodCategories = [
+export const blogCategories = [
   "All",
   "Technology",
   "Startup",

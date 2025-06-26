@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { blodCategories, blogs } from "../assets/assets";
+import { blogCategories, blogs } from "../assets/assets";
 import { motion } from "motion/react";
 import BlogCard from "./BlogCard";
 
@@ -8,7 +8,7 @@ export default function BlogList() {
   return (
     <>
       <div className="relative flex justify-center gap-4 my-10 sm:gap-6">
-        {blodCategories.map((category) => (
+        {blogCategories.map((category) => (
           <div key={category} className="relative">
             <button
               onClick={() => setMenu(category)}
