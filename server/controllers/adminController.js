@@ -49,7 +49,7 @@ export const getDashboardData = async (req, res) => {
     }
 }
 
-export const deleteCommentById = async ()=> {
+export const deleteCommentById = async (req, res)=> {
     try {
         const {id} = req.body;
         await Comment.findByIdAndDelete(id);
@@ -59,7 +59,7 @@ export const deleteCommentById = async ()=> {
     }
 }
 
-export const approvedCommentById = async ()=> {
+export const approvedCommentById = async (req, res)=> {
     try {
         const {id} = req.body;
         await Comment.findByIdAndUpdate(id, {isApproved: true})

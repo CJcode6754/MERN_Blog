@@ -3,6 +3,8 @@ import { RiBloggerLine, RiDraftLine } from "react-icons/ri";
 import { BiCommentDetail } from "react-icons/bi";
 import { dashboard_data } from "../../assets/assets";
 import BlogTableItem from "../../components/admin/BlogTableItem";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({
@@ -12,8 +14,15 @@ const Dashboard = () => {
     recentBlogs: [],
   });
 
+  const {axios} = useAppContext();
+
   const fetchDashboard = async () => {
-    setDashboardData(dashboard_data);
+    try {
+      const {data} = await axios.get('/api/admin/dashboard');
+      data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
+    } catch (error) {
+      toast.error(data.message)
+    }
   };
 
   useEffect(() => {
@@ -72,12 +81,12 @@ const Dashboard = () => {
           <div className="overflow-x-auto rounded-xl shadow-sm bg-white">
             <table className="w-full text-sm max-w-6xl">
               <thead className="text-xs text-gray-500 uppercase bg-gray-100">
-                <tr>
-                  <th className="px-4 py-3 text-left">ID</th>
-                  <th className="px-4 py-3 text-left">Blog Title</th>
-                  <th className="px-4 py-3 text-left hidden sm:table-cell">Date</th>
-                  <th className="px-4 py-3 text-left hidden sm:table-cell">Status</th>
-                  <th className="px-4 py-3 text-left">Actions</th>
+                <tr className="text-center">
+                  <th className="px-4 py-3">ID</th>
+                  <th className="px-4 py-3">Blog Title</th>
+                  <th className="px-4 py-3 hidden sm:table-cell">Date</th>
+                  <th className="px-4 py-3 hidden sm:table-cell">Status</th>
+                  <th className="px-4 py-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
