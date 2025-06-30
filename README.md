@@ -62,7 +62,7 @@ THINKDraft/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/THINKDraft.git
+git clone https://github.com/CJcode6754/ThinkDraft.git
 cd THINKDraft
 ```
 
