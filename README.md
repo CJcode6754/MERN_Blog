@@ -166,18 +166,4 @@ Make sure to update the `VITE_API_URL` in your client environment variables to p
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 📞 Support
-
-If you have any questions or need help, please open an issue on GitHub or contact the maintainers.
-
----
-
-**Made with ❤️ by [Your Name]**
+**Made with ❤️ by Ceejay Ibabiosa**
