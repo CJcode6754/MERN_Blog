@@ -10,7 +10,7 @@ export default function BlogCard({blog}) {
         <span className='inline-block px-3 py-1 mt-4 ml-5 text-xs text-blue-700 rounded-full bg-blue-500/20'>{category}</span>
         <div className='p-5'>
             <h4 className='mb-2 font-medium text-gray-900'>{title}</h4>
-            <p className='mb-3 text-xs text-gray-600'>{description.slice(0, 80)}</p>
+            <p className='mb-3 text-xs text-gray-600' dangerouslySetInnerHTML={{__html: description.slice(0, 80) + "..."}}></p>
         </div>
     </div>
   )
